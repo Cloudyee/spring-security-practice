@@ -11,5 +11,4 @@ public class EazyBankBackendApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(EazyBankBackendApplication.class, args);
 	}
-
 }
