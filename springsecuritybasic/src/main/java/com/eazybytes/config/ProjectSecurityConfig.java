@@ -4,8 +4,11 @@ import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
+
+@EnableWebSecurity(debug = true)
 @Configuration
 public class ProjectSecurityConfig {
     //커스텀 Bean 제작 완료
@@ -18,5 +21,11 @@ public class ProjectSecurityConfig {
                 .and().formLogin()
                 .and().httpBasic();
         return http.build();
+
+        //모든 요청 거부
+//                http.authorizeHttpRequests().anyRequest().denyAll()
+//                .and().formLogin()
+//                .and().httpBasic();
+//                return http.build();
     }
 }
