@@ -5,7 +5,7 @@
 
 <br>
 
-### Spring Security Framework를 사용하는 이유
+## Spring Security Framework를 사용하는 이유
 
 - 보안을 프레임워크에 맡겨 개발자들이 웹 애플리케이션을 향상시키는 비즈니스 로직에 집중할 수 있다.
 - 모든 보안 시나리오를 참고한 실력있는 개발자들이 제작한 프레임워크이다.
@@ -23,7 +23,7 @@
 <br>
 <br>
 
-### [서블릿과 필터]
+## [서블릿과 필터]
 ![img_3.png](img_3.png)
 - 요청을 HTTP 프로토콜로 전송
 - Java와 요청 사이의 중재자 : '서블릿 컨테이너' or '웹 서버'
@@ -44,7 +44,7 @@
 <b>서블릿과 필터에 대해 잘 이해하는 것이 좋을 것이다.</b>
 <br><br>
 
-### [Spring Secyrity internal Flow]
+## [Spring Secyrity internal Flow]
 ![img_4.png](img_4.png)
 유저는 백엔드 서버에 요청을 전송한다. <br>
 -> spring security의 필터들이 유저가 접근하고자 하는 경로를 확인하다.<br>
