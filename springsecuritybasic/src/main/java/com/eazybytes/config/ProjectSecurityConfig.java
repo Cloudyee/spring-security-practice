@@ -8,10 +8,14 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+
+import javax.sql.DataSource;
 
 
 @EnableWebSecurity(debug = true)
@@ -38,35 +42,46 @@ public class ProjectSecurityConfig {
 //                return http.build();
     }
 
-    @Bean
-    public InMemoryUserDetailsManager userDetailService(){
-        // Approach 1 where we use withDefaultPasswordEncoder
-//        UserDetails admin = User.withDefaultPasswordEncoder()
-//                .username("admin")
+
+
+//    @Bean
+//    public InMemoryUserDetailsManager userDetailService(){
+//        // Approach 1 where we use withDefaultPasswordEncoder
+////        UserDetails admin = User.withDefaultPasswordEncoder()
+////                .username("admin")
+////                .password("12345")
+////                .authorities("admin")
+////                .build();
+////        UserDetails user = User.withDefaultPasswordEncoder()
+////                .username("user")
+////                .password("12345")
+////                .authorities("read")
+////                .build();
+////        return new InMemoryUserDetailsManager(admin, user);
+//
+//
+//        //Approach 2 where we use NoOpPasswordEncoder Bean
+//        UserDetails admin = User.withUsername("admin")
 //                .password("12345")
 //                .authorities("admin")
 //                .build();
-//        UserDetails user = User.withDefaultPasswordEncoder()
-//                .username("user")
+//        UserDetails user = User.withUsername("user")
 //                .password("12345")
 //                .authorities("read")
 //                .build();
 //        return new InMemoryUserDetailsManager(admin, user);
+//    }
 
-
-        //Approach 2 where we use NoOpPasswordEncoder Bean
-        UserDetails admin = User.withUsername("admin")
-                .password("12345")
-                .authorities("admin")
-                .build();
-        UserDetails user = User.withUsername("user")
-                .password("12345")
-                .authorities("read")
-                .build();
-        return new InMemoryUserDetailsManager(admin, user);
+    //JDBC방식을 사용하려 한다는것을 알 수 있음 ,
+    // 이를 바탕으로 인증을 진행할 수 있음
+    //현재 상태 : 나의 비밀번호는 텍스트로 되어있으니, 일반 텍스트로 취급하여 주십시오!
+    @Bean
+    public UserDetailsService useDetailsService(DataSource dataSource){
+        return new JdbcUserDetailsManager(dataSource);
     }
 
     //보안상 장하진 않는 방법이다.
+    // 비밀번호가 어떤식으로 저장되어있는지 알려주는 것
     @Bean
     public PasswordEncoder passwordEncoder(){
         return NoOpPasswordEncoder.getInstance();
