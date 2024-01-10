@@ -26,11 +26,17 @@ public class ProjectSecurityConfig {
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         /**
-         * 보안 허용과 금지 혼합 사용
+         * .authorizeReqiests() + 보안 허용과 금지 혼합 사용
+         *
+         * spring security는 기본적으로 값을 변형하려고 하면
+         * csrf를 방지하기 위해 이를 저지한다.
+         * 따라서 임시로 csrt().disable()을 작성하여
+         * 값의 변형을 모두 허용해주었다.
          */
-        http.authorizeRequests()
+        http.csrf().disable()
+                .authorizeRequests()
                 .requestMatchers("/mycards", "/myAccount", "/myLoans", "/myBalance").authenticated()
-                .requestMatchers("/contact", "/notices").permitAll()
+                .requestMatchers("/contact", "/notices","/register").permitAll()
                 .and().formLogin()
                 .and().httpBasic();
         return http.build();
@@ -43,8 +49,6 @@ public class ProjectSecurityConfig {
 //                return http.build();
     }
 // =======================================================================
-
-
 //    @Bean
 //    public InMemoryUserDetailsManager userDetailService(){
 //        // Approach 1 where we use withDefaultPasswordEncoder
@@ -79,6 +83,7 @@ public class ProjectSecurityConfig {
     // 하지만 jdbcUserDetailManager의 테이블 구성과 똑같도록 항상 설계할 수는 없는 일이다.
     // -> 커스텀 테이블을 제작후 JPA를 활용하여 운용
     //      => useDetailsService를 implements한 커스텀테이블을 활용하였으므로, 해당 코드는 혼란을 초래한다.
+
 //    @Bean
 //    public UserDetailsService useDetailsService(DataSource dataSource){
 //        return new JdbcUserDetailsManager(dataSource);
