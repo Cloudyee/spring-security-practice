@@ -8,7 +8,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 public class Customer {
-    @Id
+    @Id //이 열은 기본키이다.
     @GeneratedValue(strategy= GenerationType.AUTO, generator="native")
     @GenericGenerator(name = "native", strategy = "native")
     private int id;

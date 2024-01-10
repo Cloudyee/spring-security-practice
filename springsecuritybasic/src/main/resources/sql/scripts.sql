@@ -30,7 +30,7 @@ CREATE TABLE customer (
     -- -- authorities 테이블에 대한 유니크 인덱스 생성
 -- CREATE UNIQUE INDEX ix_auth_username ON authorities (username, authority);
 
-    INSERT IGNORE INTO users VALUES (NULL, 'happy', '12345', '1');
+INSERT IGNORE INTO users VALUES (NULL, 'happy', '12345', '1');
 INSERT IGNORE INTO authorities VALUES (NULL, 'happy', 'write');
 INSERT IGNORE INTO customer(email, pwd, role ) VALUES ('gyhung@example.com', 54321, 'admin');
 
