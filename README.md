@@ -78,3 +78,9 @@ Spring Security에서 제공하는 인터페이스나 클래스를 활용 가능
 전체적인 흐름을 각 필터들과 구조의 역할을 바탕으로 이해하면 좋을 것이다!
 ![img_1.png](img_1.png)
 <br><br>
+
+## [User Management]
+![img_2.png](img_2.png)
+- UserDetail 인터페이스와 메서드 등의 구조를 파악하여 이를 적절히 응용할 수 있도록 해야한다!
+<br><br>
+
