@@ -78,17 +78,13 @@ public class ProjectSecurityConfig {
     // 이를 바탕으로 인증을 진행할 수 있음
     // 하지만 jdbcUserDetailManager의 테이블 구성과 똑같도록 항상 설계할 수는 없는 일이다.
     // -> 커스텀 테이블을 제작후 JPA를 활용하여 운용
-
+    //      => useDetailsService를 implements한 커스텀테이블을 활용하였으므로, 해당 코드는 혼란을 초래한다.
 //    @Bean
 //    public UserDetailsService useDetailsService(DataSource dataSource){
 //        return new JdbcUserDetailsManager(dataSource);
 //    }
 // =======================================================================
 
-    @Bean
-    public UserDetailsService useDetailsService(DataSource dataSource){
-        return new JdbcUserDetailsManager(dataSource);
-    }
 
     //보안상 장하진 않는 방법이다.
     // 비밀번호가 어떤식으로 저장되어있는지 알려주는 것
