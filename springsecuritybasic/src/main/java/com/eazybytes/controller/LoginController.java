@@ -2,15 +2,20 @@ package com.eazybytes.controller;
 
 import com.eazybytes.model.Customer;
 import com.eazybytes.repository.CustomerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class LoginController {
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     private final CustomerRepository customerRepository;
 
     LoginController(CustomerRepository customerRepository){
@@ -24,6 +29,8 @@ public class LoginController {
         ResponseEntity response=null;
 
         try{
+            String hashPwd = passwordEncoder.encode(customer.getPwd());
+            customer.setPwd(hashPwd);
             savedCustomer = customerRepository.save(customer);
         if(savedCustomer.getId() > 0 ){
             response=ResponseEntity

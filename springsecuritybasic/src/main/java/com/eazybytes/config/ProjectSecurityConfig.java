@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
@@ -90,12 +91,13 @@ public class ProjectSecurityConfig {
 //    }
 // =======================================================================
 
-
+    //return NoOpPasswordEncoder.getInstance();
     //보안상 장하진 않는 방법이다.
     // 비밀번호가 어떤식으로 저장되어있는지 알려주는 것
-    //현재 상태 : 나의 비밀번호는 텍스트로 되어있으니, 일반 텍스트로 취급하여 주십시오!
+    //나의 비밀번호는 텍스트로 되어있으니, 일반 텍스트로 취급하여 주십시오!
+
     @Bean
     public PasswordEncoder passwordEncoder(){
-        return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder();
     }
 }
