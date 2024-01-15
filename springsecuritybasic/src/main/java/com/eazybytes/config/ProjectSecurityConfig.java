@@ -1,5 +1,6 @@
 package com.eazybytes.config;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.cglib.proxy.NoOp;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 import javax.sql.DataSource;
 
@@ -26,6 +29,14 @@ public class ProjectSecurityConfig {
     //spring security 7부터 람다식으로 문법이 변경된다. 참고!
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
+        http.cors().configurationSource(new CorsConfigurationSource() {
+            @Override
+            public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+                return config;
+            }
+        })
+
+
         /**
          * .authorizeReqiests() + 보안 허용과 금지 혼합 사용
          *
@@ -34,7 +45,7 @@ public class ProjectSecurityConfig {
          * 따라서 임시로 csrt().disable()을 작성하여
          * 값의 변형을 모두 허용해주었다.
          */
-        http.csrf().disable()
+        .csrf().disable()
                 .authorizeRequests()
                 .requestMatchers("/mycards", "/myAccount", "/myLoans", "/myBalance").authenticated()
                 .requestMatchers("/contact", "/notices","/register").permitAll()

@@ -153,6 +153,11 @@ PasswordEncoder : 인터페이스
 - supports 추상메소드 : 인증의 정보를 알려준다.
 <br><br>
 ## 보안
-### CORS
+### CORS (Cross Origin Resource Sharing)
+- 두가지 출처(HTTP프로토콜, 도메인, 포트)에서 자원을 공유할 시 = 교차 출처
+  - 브라우저들이 보안상의 이유로 이러한 소통을 차단한다.
+  - @CrossOrigin(origins ="")을 활용하여 어느곳에서 소통받으려 하는지 출처를 언급해주면 된다.
+  - spring security SecurityFilterChain의 bean을 생성할 시 CORS설정을 추가할 수 있다.
+
 
 ### CSRF
