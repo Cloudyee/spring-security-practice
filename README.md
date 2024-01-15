@@ -151,3 +151,8 @@ PasswordEncoder : 인터페이스
 인증논리를 진행할 때 중요한 개념이다.<br>
 - authenticate 추상메소드 : 성공적인 인증정보를 생산하고 있는지 객체를 통해 확인 가능하다.
 - supports 추상메소드 : 인증의 정보를 알려준다.
+<br><br>
+## 보안
+### CORS
+
+### CSRF
