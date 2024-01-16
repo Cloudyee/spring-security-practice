@@ -23,6 +23,7 @@ public class NoticesController {
         List<Notice> notices = noticeRepository.findAllActiveNotices();
         if (notices != null ) {
             return ResponseEntity.ok()
+                    //cacheControl maxAge를 설정함으로써 해당 시간 안에 반복 요청시 다시 요청이 가지 않도록 설정
                     .cacheControl(CacheControl.maxAge(60, TimeUnit.SECONDS))
                     .body(notices);
         }else {

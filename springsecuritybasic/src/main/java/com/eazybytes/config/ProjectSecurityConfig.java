@@ -34,7 +34,7 @@ public class ProjectSecurityConfig {
             @Override
             public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                 CorsConfiguration config = new CorsConfiguration();
-                //백엔드와 소통을 허용할 루트 설정
+                //백엔드와 소통을 허용할 루트 설정 - 현재 프론트 허용
                 config.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
                 config.setAllowedMethods(Collections.singletonList("*"));
                 config.setAllowCredentials(true);
