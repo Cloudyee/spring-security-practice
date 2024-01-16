@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-
 public class EazyBankUsernamePwdAuthenticationProvider implements AuthenticationProvider {
 
     private final CustomerRepository customerRepository;
@@ -34,10 +33,11 @@ public class EazyBankUsernamePwdAuthenticationProvider implements Authentication
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = authentication.getName();
-        String pwd = authentication.getName();
+        String pwd = authentication.getCredentials().toString();
         List<Customer> customer = customerRepository.findByEmail(username);
         if(customer.size() > 0){
             if(passwordEncoder.matches(pwd, customer.get(0).getPwd())){
+                System.out.println("hi");
                 List<GrantedAuthority> authorities = new ArrayList<>();
                 authorities.add(new SimpleGrantedAuthority(customer.get(0).getRole()));
                 return new UsernamePasswordAuthenticationToken(username, pwd , authorities);
@@ -45,7 +45,8 @@ public class EazyBankUsernamePwdAuthenticationProvider implements Authentication
                 throw  new BadCredentialsException("Invalid password!");
             }
         }else{
-            throw  new BadCredentialsException("Np user registered with this detail!");
+            System.out.println("no such user");
+            throw  new BadCredentialsException("No user registered with this detail!");
         }
     }
 

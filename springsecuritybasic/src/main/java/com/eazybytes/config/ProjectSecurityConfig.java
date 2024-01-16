@@ -1,5 +1,6 @@
 package com.eazybytes.config;
 
+import com.eazybytes.filter.CsrfCookieFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.cglib.proxy.NoOp;
@@ -7,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,6 +18,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -30,7 +35,17 @@ public class ProjectSecurityConfig {
     //spring security 7부터 람다식으로 문법이 변경된다. 참고!
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.cors().configurationSource(new CorsConfigurationSource() {
+        //객체 생성
+        //CSRF 토큰값 전달을 위해 객체 활용
+        CsrfTokenRequestAttributeHandler requestHandler = new CsrfTokenRequestAttributeHandler();
+        requestHandler.setCsrfRequestAttributeName("_csrf");
+
+        //이 두 줄을 추가하지않으면 로그인 후 매 ui 페이지마다 자격증명을 다시 보내야한다. 주의!
+        http.securityContext().requireExplicitSave(false)
+                //매 요청마다 새로운 세션 생성
+                .and().sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+
+                .cors(corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
             @Override
             public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                 CorsConfiguration config = new CorsConfiguration();
@@ -42,19 +57,18 @@ public class ProjectSecurityConfig {
                 config.setMaxAge(3600L);
                 return config;
             }
-        }).and() //서로 다른 설정들을 연결할 때는 메소드를 들고와야한다.
+        })).csrf((csrf)->csrf.csrfTokenRequestHandler(requestHandler).ignoringRequestMatchers("/contact", "/register")
+                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
+                .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
         /**
          * .authorizeReqiests() + 보안 허용과 금지 혼합 사용
          *
          * spring security는 기본적으로 값을 변형하려고 하면
          * csrf를 방지하기 위해 이를 저지한다.
-         * 따라서 임시로 csrt().disable()을 작성하여
-         * 값의 변형을 모두 허용해주었다.
          */
-        .csrf().disable()
                 .authorizeRequests()
-                .requestMatchers("/mycards", "/myAccount", "/myLoans", "/myBalance").authenticated()
-                .requestMatchers("/contact", "/notices","/register").permitAll()
+                .requestMatchers("/myCards", "/myAccount", "/myLoans", "/myBalance", "/user", "/contact").authenticated()
+                .requestMatchers( "/notices","/register").permitAll()
                 .and().formLogin()
                 .and().httpBasic();
         return http.build();

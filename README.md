@@ -161,3 +161,6 @@ PasswordEncoder : 인터페이스
 
 
 ### CSRF
+- 보안 공격 / 보안 위협
+  - 이를 방지하기위해 포스트 / 데이터 베이스의 변경을 spring security 에서 차단한다.
+  - 
