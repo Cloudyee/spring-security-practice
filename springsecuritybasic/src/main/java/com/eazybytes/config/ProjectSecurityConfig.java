@@ -20,6 +20,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 import javax.sql.DataSource;
+import java.util.Collections;
 
 
 @EnableWebSecurity(debug = true)
@@ -32,11 +33,16 @@ public class ProjectSecurityConfig {
         http.cors().configurationSource(new CorsConfigurationSource() {
             @Override
             public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+                CorsConfiguration config = new CorsConfiguration();
+                //백엔드와 소통을 허용할 루트 설정
+                config.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
+                config.setAllowedMethods(Collections.singletonList("*"));
+                config.setAllowCredentials(true);
+                config.setAllowedHeaders(Collections.singletonList("*"));
+                config.setMaxAge(3600L);
                 return config;
             }
-        })
-
-
+        }).and() //서로 다른 설정들을 연결할 때는 메소드를 들고와야한다.
         /**
          * .authorizeReqiests() + 보안 허용과 금지 혼합 사용
          *
