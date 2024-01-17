@@ -13,7 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 
 //엔티티를 폴더 밖에 작성했을 경우 엔티티 경로 작성
 //@EntityScan("엔티티 경로")
-@EnableWebSecurity(debug = true)
+//@EnableWebSecurity(debug = true)
 @SpringBootApplication
 public class EazyBankBackendApplication {
 
