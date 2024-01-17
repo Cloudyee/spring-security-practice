@@ -64,6 +64,7 @@ public class ProjectSecurityConfig {
 
                         .addFilterAfter(new AuthoritiesLoggingAfterFilter(), BasicAuthenticationFilter.class)
                 .addFilterAfter(new JWTTokenGeneratorFilter() , BasicAuthenticationFilter.class)
+                .addFilterBefore(new JWTTokenValidatorFilter(), BasicAuthenticationFilter.class)
         /**
          * .authorizeRequests() + 보안 허용과 금지 혼합 사용
          *

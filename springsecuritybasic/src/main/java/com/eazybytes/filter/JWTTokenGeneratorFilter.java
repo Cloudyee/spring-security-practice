@@ -42,7 +42,7 @@ public class JWTTokenGeneratorFilter extends OncePerRequestFilter {
 
     //메소드의 조건에 따라 이를 수행하지 않는 설정
     //true를 반환하면 doFilterInternal메서드가 호출되지 않는다
-    // -> /user 경로에서는 해당 필터를 적용하지 않는다!
+    // -> /user가 아니면 해당 필터가 동작하지 않는다
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         return !request.getServletPath().equals("/user");
