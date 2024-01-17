@@ -1,9 +1,6 @@
 package com.eazybytes.config;
 
-import com.eazybytes.filter.AuthoritiesLoggingAfterFilter;
-import com.eazybytes.filter.AuthoritiesLoggingAtFilter;
-import com.eazybytes.filter.CsrfCookieFilter;
-import com.eazybytes.filter.RequestValidationBeforeFilter;
+import com.eazybytes.filter.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.cglib.proxy.NoOp;
@@ -28,6 +25,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 import javax.sql.DataSource;
+import java.util.Arrays;
 import java.util.Collections;
 
 
@@ -43,10 +41,7 @@ public class ProjectSecurityConfig {
         CsrfTokenRequestAttributeHandler requestHandler = new CsrfTokenRequestAttributeHandler();
         requestHandler.setCsrfRequestAttributeName("_csrf");
 
-        //이 두 줄을 추가하지않으면 로그인 후 매 ui 페이지마다 자격증명을 다시 보내야한다. 주의!
-        http.securityContext().requireExplicitSave(false)
-                //매 요청마다 새로운 세션 생성
-                .and().sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 
                 .cors(corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
             @Override
@@ -57,6 +52,7 @@ public class ProjectSecurityConfig {
                 config.setAllowedMethods(Collections.singletonList("*"));
                 config.setAllowCredentials(true);
                 config.setAllowedHeaders(Collections.singletonList("*"));
+                config.setAllowedHeaders(Arrays.asList("Authorization"));
                 config.setMaxAge(3600L);
                 return config;
             }
@@ -67,6 +63,7 @@ public class ProjectSecurityConfig {
                         .addFilterAt(new AuthoritiesLoggingAtFilter(), BasicAuthenticationFilter.class)
 
                         .addFilterAfter(new AuthoritiesLoggingAfterFilter(), BasicAuthenticationFilter.class)
+                .addFilterAfter(new JWTTokenGeneratorFilter() , BasicAuthenticationFilter.class)
         /**
          * .authorizeRequests() + 보안 허용과 금지 혼합 사용
          *
