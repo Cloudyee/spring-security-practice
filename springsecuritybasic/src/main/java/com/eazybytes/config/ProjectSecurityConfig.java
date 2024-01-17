@@ -1,5 +1,6 @@
 package com.eazybytes.config;
 
+import com.eazybytes.filter.AuthoritiesLoggingAfterFilter;
 import com.eazybytes.filter.CsrfCookieFilter;
 import com.eazybytes.filter.RequestValidationBeforeFilter;
 import jakarta.servlet.http.HttpServletRequest;
@@ -61,7 +62,8 @@ public class ProjectSecurityConfig {
         })).csrf((csrf)->csrf.csrfTokenRequestHandler(requestHandler).ignoringRequestMatchers("/contact", "/register")
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
                         .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
-                .addFilterBefore(new RequestValidationBeforeFilter(), BasicAuthenticationFilter.class)
+                        .addFilterBefore(new RequestValidationBeforeFilter(), BasicAuthenticationFilter.class)
+                        .addFilterAfter(new AuthoritiesLoggingAfterFilter(), BasicAuthenticationFilter.class)
         /**
          * .authorizeReqiests() + 보안 허용과 금지 혼합 사용
          *
@@ -69,10 +71,6 @@ public class ProjectSecurityConfig {
          * csrf를 방지하기 위해 이를 저지한다.
          */
                 .authorizeRequests()
-//                .requestMatchers("/myAccount").hasAuthority("VIEWACCOUNT")
-//                .requestMatchers("/myBalance").hasAnyAuthority("VIEWACCOUNT","VIEWBALANCE")
-//                .requestMatchers("/myLoans").hasAuthority("VIEWLOANS")
-//                .requestMatchers("/myCards").hasAuthority("VIEWCARDS")
                 .requestMatchers("/myAccount").hasRole("USER")
                 .requestMatchers("/myBalance").hasAnyRole("USER","ADMIN")
                 .requestMatchers("/myLoans").hasRole("USER")
