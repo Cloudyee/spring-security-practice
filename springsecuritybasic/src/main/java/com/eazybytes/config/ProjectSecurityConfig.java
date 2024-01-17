@@ -67,7 +67,11 @@ public class ProjectSecurityConfig {
          * csrf를 방지하기 위해 이를 저지한다.
          */
                 .authorizeRequests()
-                .requestMatchers("/myCards", "/myAccount", "/myLoans", "/myBalance", "/user", "/contact").authenticated()
+                .requestMatchers("/myAccount").hasAuthority("VIEWACCOUNT")
+                .requestMatchers("/myBalance").hasAnyAuthority("VIEWACCOUNT","VIEWBALANCE")
+                .requestMatchers("/myLoans").hasAuthority("VIEWLOANS")
+                .requestMatchers("/myCards").hasAuthority("VIEWCARDS")
+                .requestMatchers("/user").authenticated()
                 .requestMatchers( "/notices","/register").permitAll()
                 .and().formLogin()
                 .and().httpBasic();
