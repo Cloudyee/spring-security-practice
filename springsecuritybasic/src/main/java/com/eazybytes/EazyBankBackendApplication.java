@@ -3,6 +3,7 @@ package com.eazybytes;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 //실행해줄 파일을 parant외부에 설정해주었을 경우
@@ -14,6 +15,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 //엔티티를 폴더 밖에 작성했을 경우 엔티티 경로 작성
 //@EntityScan("엔티티 경로")
 //@EnableWebSecurity(debug = true)
+
+//메소두 래밸 보안 설정이 가능하다.
+@EnableMethodSecurity
 @SpringBootApplication
 public class EazyBankBackendApplication {
 
