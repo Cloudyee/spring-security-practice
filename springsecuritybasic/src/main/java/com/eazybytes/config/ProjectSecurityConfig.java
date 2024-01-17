@@ -68,7 +68,7 @@ public class ProjectSecurityConfig {
 
                         .addFilterAfter(new AuthoritiesLoggingAfterFilter(), BasicAuthenticationFilter.class)
         /**
-         * .authorizeReqiests() + 보안 허용과 금지 혼합 사용
+         * .authorizeRequests() + 보안 허용과 금지 혼합 사용
          *
          * spring security는 기본적으로 값을 변형하려고 하면
          * csrf를 방지하기 위해 이를 저지한다.
